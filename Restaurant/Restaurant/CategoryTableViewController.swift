@@ -13,25 +13,36 @@ class CategoryTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUI), name: MenuController.menuDataUpdatedNotification, object: nil)
+        updateUI()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        /*
         MenuController.shared.fetchCategories { (categories) in
             if let categories = categories {
                 self.updateUI(with: categories)
             }
         }
+        */
     }
     
+    @objc func updateUI() {
+        categories = MenuController.shared.categories
+        tableView.reloadData()
+    }
+    
+    /*
     func updateUI(with categories: [String]) {
         DispatchQueue.main.async {
             self.categories = categories
             self.tableView.reloadData()
         }
     }
-        
+    */
     
     // MARK: - Table view data source
 
