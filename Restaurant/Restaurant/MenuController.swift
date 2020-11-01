@@ -14,6 +14,8 @@ class MenuController {
     let baseURL = URL(string: "http://localhost:8090/")!
     static let shared = MenuController()
     
+    static let menuDataUpdatedNotification = Notification.Name("MenuController.menuDataUpdated")
+    
     static let orderUpdatedNotification = Notification.Name("MenuController.orderUpdated")
     
     var order = Order() {
@@ -95,6 +97,13 @@ class MenuController {
             itemsByID[item.id] = item
             itemsByCategory[item.category, default: []].append(item)
         }
+        print(itemsByID)
+        print(itemsByCategory)
+        print()
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: MenuController.menuDataUpdatedNotification, object: nil)
+        }
+         
     }
     
     func loadRemoteData() {

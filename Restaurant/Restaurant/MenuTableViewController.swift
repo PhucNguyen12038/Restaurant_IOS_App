@@ -8,19 +8,23 @@
 import UIKit
 
 class MenuTableViewController: UITableViewController {
-    var category: String!
+    var category: String?
     var menuItems = [MenuItem]()
     let menuController = MenuController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUI), name: MenuController.menuDataUpdatedNotification, object: nil)
+        updateUI()
+        /*
         title = category.capitalized
         MenuController.shared.fetchMenuItems(forCategory: category) { (menuItems) in
             if let menuItems = menuItems {
                 self.updateUI(with: menuItems)
             }
         }
+        */
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -28,6 +32,14 @@ class MenuTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    @objc func updateUI() {
+        guard let category = category else {return}
+        title = category.capitalized
+        menuItems = MenuController.shared.items(forCategory: category) ?? []
+        tableView.reloadData()
+    }
+    
+    /*
     func updateUI(with menuItems: [MenuItem]) {
         DispatchQueue.main.async {
             self.menuItems = menuItems
@@ -36,7 +48,7 @@ class MenuTableViewController: UITableViewController {
         
         
     }
-
+    */
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -88,8 +100,14 @@ class MenuTableViewController: UITableViewController {
     
     override func encodeRestorableState(with coder: NSCoder) {
         super.encodeRestorableState(with: coder)
+        guard let category = category else {return}
         coder.encode(category, forKey: "category")
     }
     
+    override func decodeRestorableState(with coder: NSCoder) {
+        super.decodeRestorableState(with: coder)
+        category = coder.decodeObject(forKey: "category") as? String
+        updateUI()
+    }
 
 }

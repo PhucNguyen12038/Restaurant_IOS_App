@@ -45,12 +45,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MenuController.shared.saveItems()
     }
     
-    func application(_ application: UIApplication, shouldSaveSecureApplicationState coder: NSCoder) -> Bool {
+    func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
         return true
     }
     
     func application(_ application: UIApplication, shouldRestoreSecureApplicationState coder: NSCoder) -> Bool {
         return true
     }
+    
+    
 }
 
