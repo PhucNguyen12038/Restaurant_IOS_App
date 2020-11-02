@@ -97,9 +97,6 @@ class MenuController {
             itemsByID[item.id] = item
             itemsByCategory[item.category, default: []].append(item)
         }
-        print(itemsByID)
-        print(itemsByCategory)
-        print()
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: MenuController.menuDataUpdatedNotification, object: nil)
         }
